@@ -28,7 +28,7 @@ final class PhraseController {
                 .flatMap { _ in
                     try self.unownedPhrase(req: req, userID: user.requireID())
                 }
-                .map { [newPhrase, $0].compactMap { $0 } }
+                .map { CreatePhraseResponse(created: newPhrase, received: $0) }
         }
     }
 
@@ -67,4 +67,9 @@ struct CreatePhraseRequest: Codable {
     var lines: [Line]
     var backgroundColor: Color
     var foregroundColor: Color
+}
+
+struct CreatePhraseResponse: Codable {
+    var created: Phrase
+    var received: Phrase
 }
