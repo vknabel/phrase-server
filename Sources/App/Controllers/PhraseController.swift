@@ -15,7 +15,7 @@ final class PhraseController {
             .filter(\.authorID == user.requireID()).all()
     }
 
-    func createPhrase(_ req: Request) throws -> Future<[Phrase]> {
+    func createPhrase(_ req: Request) throws -> Future<CreatePhraseResponse> {
         let user = try req.requireAuthenticated(User.self)
         return try req.content.decode(json: CreatePhraseRequest.self, using: JSONDecoder()).flatMap { phraseData in
             let newPhrase = try Phrase(
@@ -63,13 +63,13 @@ final class PhraseController {
     }
 }
 
-struct CreatePhraseRequest: Codable {
+struct CreatePhraseRequest: Content {
     var lines: [Line]
     var backgroundColor: Color
     var foregroundColor: Color
 }
 
-struct CreatePhraseResponse: Codable {
+struct CreatePhraseResponse: Content {
     var created: Phrase
-    var received: Phrase
+    var received: Phrase?
 }
